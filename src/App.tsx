@@ -2,24 +2,41 @@ import { useEffect, useState } from "react";
 
 import { getCharacters,type TProduct } from "./lib/api";
 
-
 const App = () => {
+
+  function Loading(Key: boolean) {
+    const loading_div = document.getElementById("loading");
+    if (Key) {
+      loading_div!.className = loading_div!.className.replace("opacity-0", "opacity-100");
+    } else {
+        loading_div!.className = loading_div!.className.replace("opacity-100", "opacity-0");
+    }
+}
+
+
   
      const [characters,setcharacter] = useState<TProduct[]>([])
      const [limit,setlimit] = useState<number>(5)
      const [skip,setskip] = useState<number>(0)
-     const [query,setquery] = useState<string>('')
+     const [query,setquery] = useState<string>('');
+      
      useEffect( () => {
        const params = new URLSearchParams();
-  if (query) params.set('query', query);
+  if (query) params.set('q', query);
   params.set('limit', String(limit));
   params.set('skip', String(skip));
   window.history.replaceState(null, '', `?${params.toString()}`);
 
-      const fetchCharacters = async () => {
-        const respone = await getCharacters({limit,skip,q:query})
-        setcharacter(respone.products)
-      }
+  const fetchCharacters = async () => {
+    Loading(true); // Show loading indicator
+    const response = await getCharacters({ limit, skip, q: query });
+    console.log(response);
+    setTimeout(() => {
+    setcharacter(response.products);
+    Loading(false); // Hide loading indicator
+    }, 2500);
+}
+
       fetchCharacters()
      },[limit,skip,query])
   return (<>
@@ -73,12 +90,13 @@ const App = () => {
   <div className="grid grid-cols-3 gap-3 p-5">
    {characters.map((c) => (
     <div className="border-2 p-4 rounded-xl border-purple-600 font-semibold h-50 px-5" key={c.id}>
-      <h1 class="text-center my-1.5">{c.title}</h1>
+      <h1 className="text-center my-1.5">{c.title}</h1>
       <p className="text-pink-500">{c.description}</p>
     </div>
    ))}
   </div>
   </>)
 };
+
 
 export default App;
