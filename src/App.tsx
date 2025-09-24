@@ -88,19 +88,14 @@ const App = () => {
         </div>
         <div className="w-max h-max ">
           <label htmlFor="skip">skip:</label>
-          <select
+          <input
+            type="number"
             value={skip}
             onChange={(e) => setSkip(Number(e.target.value))}
-            className="border-2 rounded-md w-max m-2 focus:border-green-500"
+            className="border-2 rounded-md w-13 px-1.5 m-2 focus:border-green-500"
             name="skip"
             id="skip"
-          >
-            <option value={0}>0</option>
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-            <option value={4}>4</option>
-          </select>
+          />
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
